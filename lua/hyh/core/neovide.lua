@@ -5,7 +5,7 @@ end
 
 -- ======================== Appearance Settings ========================
 -- Window opacity (0.0-1.0)
-vim.g.neovide_opacity = 0.7
+vim.g.neovide_opacity = 1.0
 -- Window background blur (0-10)
 vim.g.neovide_window_blurred = true
 vim.g.neovide_blur_amount_x = 8.0
