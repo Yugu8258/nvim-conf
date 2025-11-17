@@ -20,7 +20,6 @@ vim.opt.guifont = {
 
 -- Theme and colors (ensure termguicolors is enabled)
 vim.opt.termguicolors = true
--- vim.cmd("colorscheme rose-pine-moon") -- Use your preferred theme
 
 -- ======================== Animations & Interactions ========================
 -- Cursor animation (railgun/pulse/beam/blink/off)
