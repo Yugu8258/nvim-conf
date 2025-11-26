@@ -34,7 +34,7 @@ vim.opt.splitbelow = true       -- Open horizontal splits below the current wind
 -- Miscellaneous settings
 vim.opt.isfname:append("@-@")   -- Include "@-@" in valid filename characters
 vim.opt.updatetime = 50         -- Faster update time for UI (affects diagnostics, git signs, etc.)
-vim.opt.colorcolumn = "80"      -- Highlight column 80 (for code length guidelines)
+-- vim.opt.colorcolumn = "80"      -- Highlight column 80 (for code length guidelines)
 vim.opt.clipboard:append("unnamedplus")  -- Sync clipboard with system clipboard
 vim.opt.mouse = "a"             -- Enable mouse support in all modes
 

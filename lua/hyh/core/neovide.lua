@@ -11,6 +11,9 @@ vim.g.neovide_window_blurred = true
 vim.g.neovide_blur_amount_x = 8.0
 vim.g.neovide_blur_amount_y = 8.0
 
+vim.g.neovide_opacity = 0.9
+vim.g.neovide_window_content_opacity = 1.0
+
 -- Font configuration (Nerd Font recommended for icon support)
 vim.opt.guifont = {
 	"JetBrainsMono Nerd Font", -- Primary font
@@ -20,6 +23,7 @@ vim.opt.guifont = {
 
 -- Theme and colors (ensure termguicolors is enabled)
 vim.opt.termguicolors = true
+vim.opt.background = "dark"
 
 -- ======================== Animations & Interactions ========================
 -- Cursor animation (railgun/pulse/beam/blink/off)
