@@ -6,7 +6,7 @@ return {
       direction = 'float',
       float_opts = {
         border = 'curved',
-        width = 140,
+        width = 135,
         height = 35,
       },
     }

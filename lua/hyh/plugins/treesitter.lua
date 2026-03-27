@@ -15,6 +15,25 @@ return {
 				-- enable indentation
 				indent = { enable = true },
 
+                textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							-- 函数内部 → 就是 cif / dif 要用到的
+							["if"] = "@function.inner",
+							-- 整个函数 → daf / caf
+							["af"] = "@function.outer",
+
+							-- 可选：类、条件、循环 也给你配上
+							["ic"] = "@class.inner",
+							["ac"] = "@class.outer",
+							["ib"] = "@block.inner",
+							["ab"] = "@block.outer",
+						},
+					},
+				},
+
 				-- ensure these languages parsers are installed
 				ensure_installed = {
 					"json",
@@ -105,6 +124,10 @@ return {
 				silent = true,
 			})
 		end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		dependencies = "nvim-treesitter/nvim-treesitter",
 	},
 }
 
