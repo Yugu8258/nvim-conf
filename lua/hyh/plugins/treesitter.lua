@@ -100,13 +100,9 @@ return {
 			separator = "─",
 			zindex = 20,
 		},
-		keys = {
-			{
-				"<leader>tc",
-				"<cmd>TSContextToggle<CR>",
-				desc = "Toggle Treesitter Context",
-			},
-		},
 	},
 }
 
+		-- 🔥 移除重复，只保留单向，插件自动识别反向
+		-- 🔥 移除重复，只保留单向，插件自动识别反向
+		-- 🔥 移除重复，只保留单向，插件自动识别反向

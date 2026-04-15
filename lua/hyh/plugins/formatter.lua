@@ -69,14 +69,39 @@ return {
 			},
 		})
 
-		-- 格式化快捷键
+		-- ==============================
+		-- 格式化 + 末尾空行智能处理
+		-- ==============================
 		vim.keymap.set({ "n", "v" }, "<leader>w", function()
+			local buf = vim.api.nvim_get_current_buf()
+
+			-- 1. 执行格式化
 			conform.format({
+				bufnr = buf,
 				lsp_fallback = true,
 				async = false,
 				timeout_ms = 1000,
 			})
-		end, { desc = "Format document" })
+
+			-- 2. 智能处理末尾空行（保留 1 行，不多不少）
+			vim.schedule(function()
+				local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+				if #lines == 0 then
+					return
+				end
+
+				-- 删除末尾所有空行
+				while #lines > 0 and lines[#lines] == "" do
+					table.remove(lines)
+				end
+
+				-- 统一加 1 个空行（虚行）
+				table.insert(lines, "")
+
+				-- 写回缓冲区
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+			end)
+		end, { desc = "Format + 智能末尾空行" })
 	end,
 }
 

@@ -1,16 +1,16 @@
 return {
-	"rmagatti/alternate-toggler",
-	event = "VeryLazy",
+	"nguyenvukhang/nvim-toggler",
+	lazy = false,
 
 	config = function()
-		require("alternate-toggler").setup({
-			alternates = {
+		local toggler = require("nvim-toggler")
+
+		toggler.setup({
+			inverses = {
 				["==="] = "!==",
 				["=="] = "!=",
 				["true"] = "false",
-				["false"] = "true",
 				["error"] = "warn",
-				["warn"] = "error",
 				["yes"] = "no",
 				["on"] = "off",
 				["left"] = "right",
@@ -19,8 +19,12 @@ return {
 			},
 		})
 
-		vim.keymap.set("n", "<leader>i", "<cmd>ToggleAlternate<CR>", {
-			desc = "Toggle alternate word (true/false, ==/!=, etc)",
+		vim.keymap.set("n", "<leader>i", function()
+			require("nvim-toggler").toggle()
+		end, {
+			noremap = true,
+			silent = true,
+			desc = "Toggle alternate word",
 		})
 	end,
 }

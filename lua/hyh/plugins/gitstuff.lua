@@ -78,7 +78,7 @@ return {
     {
         "kdheepak/lazygit.nvim",
         --NOTE: Trying out lazygit in Snacks nvim
-        enabled = false,
+        enabled = true,
         cmd = {
             "LazyGit",
             "LazyGitConfig",

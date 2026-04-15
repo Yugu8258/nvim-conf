@@ -24,7 +24,9 @@ vim.keymap.set("v", "p", '"_dp', opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
-vim.keymap.set("i", "<C-c>", "<Esc>")
+vim.keymap.set("i", "<C-c>", function()
+  vim.cmd("stopinsert")
+end, { noremap = true, silent = true })
 -- clears search highlights
 vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search hl", silent = true })
 

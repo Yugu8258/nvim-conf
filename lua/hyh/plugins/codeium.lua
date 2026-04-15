@@ -22,7 +22,7 @@ return {
 			end, { expr = true, silent = true, desc = "Codeium: 下一个补全" })
 
 			-- 可选: 关闭当前补全
-			keymap("i", "<C-c>", function()
+			keymap("i", "<C-x>", function()
 				return vim.fn["codeium#Clear"]()
 			end, { expr = true, silent = true, desc = "Codeium: 关闭补全" })
 		end,
