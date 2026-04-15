@@ -40,31 +40,17 @@ return {
 				},
 			},
 			-- Snacks Modules
-			input = {
-				enabled = true,
-			},
-			quickfile = {
-				enabled = true,
-				exclude = { "latex" },
-			},
+			input = { enabled = true },
+			quickfile = { enabled = true, exclude = { "latex" } },
 			-- HACK: read picker docs @ https://github.com/folke/snacks.nvim/blob/main/docs/picker.md
 			picker = {
 				enabled = true,
-				matchers = {
-					frecency = true,
-					cwd_bonus = false,
-				},
+				matchers = { frecency = true, cwd_bonus = false },
 				formatters = {
-					file = {
-						filename_first = false,
-						filename_only = false,
-						icon_width = 2,
-					},
+					file = { filename_first = false, filename_only = false, icon_width = 2 },
 				},
 				layout = {
-					-- presets options : "default" , "ivy" , "ivy-split" , "telescope" , "vscode", "select" , "sidebar"
-					-- override picker layout in keymaps function as a param below
-					preset = "telescope", -- defaults to this layout unless overidden
+					preset = "telescope",
 					cycle = false,
 				},
 				layouts = {
@@ -86,7 +72,7 @@ return {
 						},
 					},
 					telescope = {
-						reverse = true, -- set to false for search bar to be on top
+						reverse = true,
 						layout = {
 							box = "horizontal",
 							backdrop = false,
@@ -136,18 +122,13 @@ return {
 			image = {
 				enabled = true,
 				doc = {
-					float = true, -- show image on cursor hover
-					inline = false, -- show image inline
+					float = true,
+					inline = false,
 					max_width = 50,
 					max_height = 30,
-					wo = {
-						wrap = false,
-					},
+					wo = { wrap = false },
 				},
-				convert = {
-					notify = true,
-					command = "magick",
-				},
+				convert = { notify = true, command = "magick" },
 				img_dirs = {
 					"img",
 					"images",
@@ -186,6 +167,7 @@ return {
 				},
 			},
 		},
+
 		-- NOTE: Keymaps
 		keys = {
 			{
@@ -254,8 +236,6 @@ return {
 				end,
 				desc = "Search Keymaps (Snacks Picker)",
 			},
-
-			-- Git Stuff
 			{
 				"<leader>gbr",
 				function()
@@ -263,8 +243,6 @@ return {
 				end,
 				desc = "Pick and Switch Git Branches",
 			},
-
-			-- Other Utils
 			{
 				"<leader>th",
 				function()
@@ -281,26 +259,19 @@ return {
 			},
 		},
 	},
+
 	-- NOTE: todo comments w/ snacks
 	{
 		"folke/todo-comments.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		optional = true,
+		config = function()
+			require("todo-comments").setup({})
+		end,
 		keys = {
-			{
-				"<leader>pt",
-				function()
-					require("snacks").picker.todo_comments()
-				end,
-				desc = "Todo",
-			},
-			{
-				"<leader>pT",
-				function()
-					require("snacks").picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
-				end,
-				desc = "Todo/Fix/Fixme",
-			},
+			-- 🔥 正确调用方式（无报错）
+			{ "<leader>pt", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+			{ "<leader>pT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
 		},
 	},
 }

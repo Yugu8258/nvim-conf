@@ -9,11 +9,15 @@ return {
 
 		config = function()
 			require("nvim-treesitter.configs").setup({
+				modules = {},
+				sync_install = false,
+				ignore_install = {},
+				auto_install = true, -- 自动安装缺失解析器（推荐开启）
+
 				highlight = { enable = true },
 				indent = { enable = true },
 				additional_vim_regex_highlighting = false,
 
-				-- 自动安装语言解析器
 				ensure_installed = {
 					"bash",
 					"c",
@@ -43,7 +47,6 @@ return {
 					"zig",
 				},
 
-				-- 增量选择
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -53,7 +56,6 @@ return {
 					},
 				},
 
-				-- 文本对象（函数、类、块）
 				textobjects = {
 					select = {
 						enable = true,
@@ -75,22 +77,11 @@ return {
 	-- 自动闭合标签
 	{
 		"windwp/nvim-ts-autotag",
-		ft = {
-			"html",
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-			"svelte",
-			"xml",
-		},
 		config = function()
 			require("nvim-ts-autotag").setup({
-				opts = {
-					enable_close = true,
-					enable_rename = true,
-					enable_close_on_slash = false,
-				},
+				enable_close = true,
+				enable_rename = true,
+				enable_close_on_slash = false,
 			})
 		end,
 	},

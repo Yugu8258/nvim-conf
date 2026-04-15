@@ -23,8 +23,6 @@ return {
     vim.api.nvim_set_hl(0, 'CursorWord', {
       underline = true,
       sp = '#5e81ac', -- 下划线颜色
-      -- 下划线厚度通过 cterm 或 gui 选项间接控制
-      -- 注意：实际效果可能因终端或 GUI 客户端而异
     })
   end,
 }

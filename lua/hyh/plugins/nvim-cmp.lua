@@ -32,26 +32,6 @@ return {
 			return col
 		end
 
-		local function in_snippet()
-			if not has_luasnip then
-				return false
-			end
-			local session = luasnip.session
-			local node = session.current_nodes[vim.api.nvim_get_current_buf()]
-			if not node then
-				return false
-			end
-			local snip = node.parent.snippet
-			local beg, _end = snip.mark:pos_begin_end()
-			local pos = vim.api.nvim_win_get_cursor(0)
-			return pos[1] - 1 >= beg[1] and pos[1] - 1 <= _end[1]
-		end
-
-		local function in_whitespace()
-			local col = column()
-			return col == 0 or vim.api.nvim_get_current_line():sub(col, col):match("%s")
-		end
-
 		local function in_leading_indent()
 			local c = column()
 			local p = vim.api.nvim_get_current_line():sub(1, c)
@@ -112,24 +92,9 @@ return {
 			end
 		end
 
-		local function confirm(entry)
+		-- 修复：未使用参数改为 _
+		local function confirm(_)
 			local behavior = cmp.ConfirmBehavior.Replace
-			if
-				entry
-				and entry.context.cursor_after_line:sub(
-						1,
-						math.max(0, entry.replace_range["end"].character + 1) - entry.context.cursor.col
-					)
-					~= (
-						entry.completion_item.textEdit and entry.completion_item.textEdit.newText
-						or entry.completion_item.insertText
-						or entry.completion_item.word
-						or entry.completion_item.label
-						or ""
-					):sub(-math.max(0, entry.replace_range["end"].character + 1) - entry.context.cursor.col)
-			then
-				behavior = cmp.ConfirmBehavior.Insert
-			end
 			cmp.confirm({ select = true, behavior = behavior })
 		end
 
@@ -142,8 +107,8 @@ return {
 			completion = { completeopt = "menu,menuone,noinsert" },
 
 			window = {
-				documentation = { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } },
-				completion = { border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" } },
+				documentation = { border = "rounded" },
+				completion = { border = "rounded" },
 			},
 
 			snippet = has_luasnip and {
@@ -197,61 +162,35 @@ return {
 						fb()
 					end
 				end, { "i", "s" }),
-
-				["<S-Tab>"] = cmp.mapping(function(fb)
-					if cmp.visible() then
-						cmp.select_prev_item()
-					elseif has_luasnip and in_snippet() and luasnip.jumpable(-1) then
-						luasnip.jump(-1)
-					elseif in_leading_indent() then
-						smart_bs(true)
-					elseif in_whitespace() then
-						smart_bs()
-					else
-						fb()
-					end
-				end, { "i", "s" }),
-
-				["<Tab>"] = cmp.mapping(function(_)
-					if cmp.visible() then
-						local entries = cmp.get_entries()
-						if #entries == 1 then
-							confirm(entries[1])
-						else
-							cmp.select_next_item()
-						end
-					elseif has_luasnip and luasnip.expand_or_locally_jumpable() then
-						luasnip.expand_or_jump()
-					elseif in_whitespace() then
-						smart_tab()
-					else
-						cmp.complete()
-					end
-				end, { "i", "s" }),
 			}),
 
 			formatting = {
+				fields = { "abbr", "menu", "kind" },
+				maxwidth = 50,
+				ellipsis_char = "...",
+
 				format = function(entry, item)
-					item = lspkind.cmp_format({
-						maxwidth = 25,
-						ellipsis_char = "...",
-					})(entry, item)
+					local icon = lspkind.symbolic(item.kind)
+					item.kind = icon .. " " .. item.kind
 
 					if entry.source.name == "nvim_lsp" then
 						item = tailwind_formatter(entry, item)
 					end
 
 					item.menu = ({
-						buffer = "[Buffer]",
+						buffer = "[Buf]",
 						nvim_lsp = "[LSP]",
-						luasnip = "[LuaSnip]",
+						luasnip = "[Snip]",
 						nvim_lua = "[Lua]",
-					})[entry.source.name]
+					})[entry.source.name] or ""
 
 					return item
 				end,
 			},
 		})
+
+		vim.keymap.set("i", "<Tab>", smart_tab, { silent = true })
+		vim.keymap.set("i", "<S-Tab>", function() smart_bs(true) end, { silent = true })
 	end,
 }
 

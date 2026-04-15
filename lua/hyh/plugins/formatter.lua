@@ -16,6 +16,7 @@ return {
 								return true
 							end
 						end
+						return false
 					end,
 				},
 				["markdownlint-cli2"] = {
@@ -68,35 +69,14 @@ return {
 			},
 		})
 
-		-- 快捷键：格式化 + 清理末尾空行（只保留1行）
+		-- 格式化快捷键
 		vim.keymap.set({ "n", "v" }, "<leader>w", function()
-			local buf = vim.api.nvim_get_current_buf()
-
-			-- 1. 执行格式化
 			conform.format({
 				lsp_fallback = true,
 				async = false,
 				timeout_ms = 1000,
 			})
-
-			-- 2. 格式化完成后：清理末尾空行（只保留1行）
-			vim.schedule(function()
-				local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-
-				-- 从末尾往前删除所有空行
-				while #lines > 0 and lines[#lines] == "" do
-					table.remove(lines)
-				end
-
-				-- 最后只加 1 行空行
-				if #lines > 0 then
-					table.insert(lines, "")
-				end
-
-				-- 把处理好的内容写回文件
-				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-			end)
-		end, { desc = "Format + clean trailing newlines" })
+		end, { desc = "Format document" })
 	end,
 }
 
