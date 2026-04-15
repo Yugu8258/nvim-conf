@@ -1,26 +1,18 @@
 return {
-	"lukas-reineke/virt-column.nvim",
-	event = "VeryLazy",
-	dependencies = {},
+	"lukas-reineke/virt-column.nvim", -- 代码长度标尺插件
+	event = "VeryLazy", -- 延迟加载
 	config = function()
-		local module_name = "virt-column"
-		local ok, virt_column = pcall(require, module_name)
-
+		-- 安全加载插件
+		local ok, virt_column = pcall(require, "virt-column")
 		if not ok then
-			vim.notify(
-				string.format(
-					"virt-column.nvim failed to load! Reason: Module '%s' not found\nPlease run :Lazy install virt-column.nvim",
-					module_name
-				),
-				vim.log.levels.ERROR
-			)
+			vim.notify("插件加载失败", vim.log.levels.ERROR)
 			return
 		end
 
 		virt_column.setup({
-			virtcolumn = "90",
-			char = "│",
-			exclude = {
+			virtcolumn = "120", -- 在第 120 列显示竖线
+			char = "│", -- 竖线符号
+			exclude = { -- 排除不显示的文件/窗口
 				filetypes = { "alpha", "dashboard", "neo-tree", "toggleterm", "lazy", "mason" },
 				buftypes = { "terminal", "quickfix", "help", "nofile" },
 			},

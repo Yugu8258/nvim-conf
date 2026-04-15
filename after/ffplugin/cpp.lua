@@ -1,4 +1,3 @@
-require("hyh.core")
 if vim.b.did_my_ftplugin then
 	return
 end
@@ -91,5 +90,4 @@ if vim.fn.executable("lcg-clang-format-8.0.0") == 1 then
 else
 	vim.keymap.set("v", "<leader>w", ":<C-U>%!clang-format<CR>gv", { desc = "Format selection (clang-format)" })
 end
-require("hyh.lazy")
 

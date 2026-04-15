@@ -3,67 +3,47 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPre", "BufNewFile" },
 		build = ":TSUpdate",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
+
 		config = function()
-			-- import nvim-treesitter plugin
-			local treesitter = require("nvim-treesitter.configs")
-
-			-- configure treesitter
-			treesitter.setup({ -- enable syntax highlighting
-				highlight = {
-					enable = true,
-				},
-				-- enable indentation
+			require("nvim-treesitter.configs").setup({
+				highlight = { enable = true },
 				indent = { enable = true },
+				additional_vim_regex_highlighting = false,
 
-                textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
-						keymaps = {
-							-- 函数内部 → 就是 cif / dif 要用到的
-							["if"] = "@function.inner",
-							-- 整个函数 → daf / caf
-							["af"] = "@function.outer",
-
-							-- 可选：类、条件、循环 也给你配上
-							["ic"] = "@class.inner",
-							["ac"] = "@class.outer",
-							["ib"] = "@block.inner",
-							["ab"] = "@block.outer",
-						},
-					},
-				},
-
-				-- ensure these languages parsers are installed
+				-- 自动安装语言解析器
 				ensure_installed = {
-					"json",
-					"javascript",
-					"typescript",
-					"tsx",
-					"go",
-					"yaml",
-					"html",
-					"css",
-					"python",
-					"http",
-					"prisma",
-					"markdown",
-					"markdown_inline",
-					"svelte",
-					"graphql",
 					"bash",
-					"lua",
-					"vim",
-					"dockerfile",
-					"gitignore",
-					"query",
-					"vimdoc",
 					"c",
 					"cpp",
+					"css",
+					"dockerfile",
+					"gitignore",
+					"go",
+					"graphql",
+					"html",
 					"java",
+					"javascript",
+					"json",
+					"lua",
+					"markdown",
+					"markdown_inline",
+					"prisma",
+					"python",
+					"query",
 					"rust",
+					"svelte",
+					"typescript",
+					"tsx",
+					"vim",
+					"vimdoc",
+					"yaml",
 					"zig",
 				},
+
+				-- 增量选择
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -72,62 +52,70 @@ return {
 						scope_incremental = false,
 					},
 				},
-				additional_vim_regex_highlighting = false,
+
+				-- 文本对象（函数、类、块）
+				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							["if"] = "@function.inner",
+							["af"] = "@function.outer",
+							["ic"] = "@class.inner",
+							["ac"] = "@class.outer",
+							["ib"] = "@block.inner",
+							["ab"] = "@block.outer",
+						},
+					},
+				},
 			})
 		end,
 	},
-	-- NOTE: js,ts,jsx,tsx Auto Close Tags
+
+	-- 自动闭合标签
 	{
 		"windwp/nvim-ts-autotag",
-		enabled = true,
-		ft = { "html", "xml", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte" },
+		ft = {
+			"html",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			"svelte",
+			"xml",
+		},
 		config = function()
-			-- Independent nvim-ts-autotag setup
 			require("nvim-ts-autotag").setup({
 				opts = {
-					enable_close = true, -- auto-close tags
-					enable_rename = true, -- auto-rename pairs
-					enable_close_on_slash = false, -- disable auto-close on trailing `</`
-				},
-				per_filetype = {
-					["html"] = {
-						enable_close = true, -- disable auto-closing for html
-					},
-					["typescriptreact"] = {
-						enable_close = true, -- explicitly enable auto-closing (optional, defaults to `true`)
-					},
+					enable_close = true,
+					enable_rename = true,
+					enable_close_on_slash = false,
 				},
 			})
 		end,
 	},
+
+	-- 顶部 sticky 代码上下文
 	{
 		"nvim-treesitter/nvim-treesitter-context",
-		dependencies = { "nvim-treesitter/nvim-treesitter" }, -- Depends on the treesitter you already have installed
-		event = "VeryLazy", -- Lazy load to avoid affecting startup speed
-		config = function()
-			require("treesitter-context").setup({
-				enable = true, -- Enable the sticky scroll feature
-				max_lines = 5, -- Maximum number of context levels to show at the top (class → function → loop, avoid taking too much screen space)
-				min_window_height = 0, -- No minimum window height restriction
-				line_numbers = true, -- Do not show line numbers of the context (keep it clean, set to true if needed)
-				multiline_threshold = 20, -- Only show context for blocks longer than 20 lines (avoid short blocks taking space)
-				trim_scope = "outer", -- Trim outer scopes (only show key levels of the current context)
-				mode = "cursor", -- Update context based on cursor position (more accurate)
-				separator = "─", -- Separator between context levels (enhance visual distinction)
-				highlight = "CursorLine", -- Highlight group for sticky context (reuse CursorLine color to avoid abruptness)
-				zindex = 20, -- Layer priority (prevent being covered by other plugins)
-			})
-
-			-- Optional: Bind shortcut to toggle sticky scroll quickly (press <leader>tc to switch)
-			vim.keymap.set("n", "<leader>tc", "<cmd>TSContextToggle<CR>", {
-				desc = "Toggle code structure sticky scroll",
-				silent = true,
-			})
-		end,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		dependencies = "nvim-treesitter/nvim-treesitter",
+		event = "BufReadPre",
+		opts = {
+			enable = true,
+			max_lines = 5,
+			line_numbers = true,
+			multiline_threshold = 20,
+			trim_scope = "outer",
+			mode = "cursor",
+			separator = "─",
+			zindex = 20,
+		},
+		keys = {
+			{
+				"<leader>tc",
+				"<cmd>TSContextToggle<CR>",
+				desc = "Toggle Treesitter Context",
+			},
+		},
 	},
 }
 
