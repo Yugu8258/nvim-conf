@@ -16,8 +16,8 @@ vim.opt.wrap = false -- Disable line wrapping
 -- Backup and undo settings
 vim.opt.swapfile = false -- Disable swap files
 vim.opt.backup = false -- Disable backup files
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- Directory for undo files
 vim.opt.undofile = true -- Enable persistent undo (retain undo history between sessions)
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir" -- Directory for undo files
 
 -- Search behavior
 vim.opt.inccommand = "split" -- Show live preview of substitutions in a split window
