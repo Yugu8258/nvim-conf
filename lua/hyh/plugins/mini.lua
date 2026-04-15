@@ -15,7 +15,6 @@ return {
 			})
 
 			require("mini.comment").setup({
-				-- 🔥 修复：新版 API 不需要传参数！
 				options = {
 					custom_commentstring = function()
 						return require("ts_context_commentstring.internal").calculate_commentstring()

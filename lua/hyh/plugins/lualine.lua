@@ -8,7 +8,7 @@ return {
 		local lualine = require("lualine")
 
 		-- ==============================================
-		-- 🔥 修复：系统图标识别（100% 准确版本）
+		-- 系统图标识别
 		-- ==============================================
 		local os_name = vim.loop.os_uname().sysname
 		local os_icon = "" --  fallback
