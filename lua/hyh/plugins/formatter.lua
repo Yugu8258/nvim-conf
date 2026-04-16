@@ -74,6 +74,8 @@ return {
 		-- ==============================
 		vim.keymap.set({ "n", "v" }, "<leader>w", function()
 			local buf = vim.api.nvim_get_current_buf()
+			local win = vim.api.nvim_get_current_win()
+			local cursor = vim.api.nvim_win_get_cursor(win)
 
 			-- 1. 执行格式化
 			conform.format({
@@ -83,24 +85,26 @@ return {
 				timeout_ms = 1000,
 			})
 
-			-- 2. 智能处理末尾空行（保留 1 行，不多不少）
-			vim.schedule(function()
-				local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-				if #lines == 0 then
-					return
+			-- 2. 安全修复末尾空行
+			local line_count = vim.api.nvim_buf_line_count(buf)
+			while line_count > 0 do
+				local last = vim.api.nvim_buf_get_lines(buf, line_count - 1, line_count, false)[1]
+				if last == "" then
+					vim.api.nvim_buf_set_lines(buf, line_count - 1, line_count, false, {})
+					line_count = line_count - 1
+				else
+					break
 				end
+			end
+			-- 确保最后只有 1 个空行
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "" })
 
-				-- 删除末尾所有空行
-				while #lines > 0 and lines[#lines] == "" do
-					table.remove(lines)
-				end
+			-- 3. 恢复光标，保证界面刷新
+			vim.api.nvim_win_set_cursor(win, cursor)
+			vim.cmd("redraw")
 
-				-- 统一加 1 个空行（虚行）
-				table.insert(lines, "")
-
-				-- 写回缓冲区
-				vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-			end)
+			-- 4. 保存
+			vim.cmd("silent! write")
 		end, { desc = "Format + 智能末尾空行" })
 	end,
 }
