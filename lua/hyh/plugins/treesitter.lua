@@ -12,7 +12,7 @@ return {
 				modules = {},
 				sync_install = false,
 				ignore_install = {},
-				auto_install = true, -- 自动安装缺失解析器（推荐开启）
+				auto_install = true,
 
 				highlight = { enable = true },
 				indent = { enable = true },
@@ -74,19 +74,14 @@ return {
 		end,
 	},
 
-	-- 自动闭合标签
 	{
 		"windwp/nvim-ts-autotag",
-		config = function()
-			require("nvim-ts-autotag").setup({
-				enable_close = true,
-				enable_rename = true,
-				enable_close_on_slash = false,
-			})
-		end,
+		dependencies = "nvim-treesitter/nvim-treesitter",
+		event = "VeryLazy",
+		main = "nvim-ts-autotag",
+		opts = {},
 	},
 
-	-- 顶部 sticky 代码上下文
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPre",
